@@ -1,7 +1,7 @@
 class PostsController < ApplicationController
     before_action :authenticate_user!, only: [:new, :create]
     def index 
-        @posts = Post.all
+        @posts = Post.all.order(create_at: :desc)
     end
 
     def new 
@@ -9,17 +9,18 @@ class PostsController < ApplicationController
     end
 
     def create
-        @post = Post.new(post_params)
+        @posts = current_user.posts.build(post_params)
         if @post.save
-            redirect_to @post, notice: 'Post created'
+            redirect_to root_path, notice: 'Post created'
         else
             render 'new', notice: 'Failed to crete post'
+        end
     end
 
     private
 
     def post_params 
-        params.require(:post).permit()
+        params.require(:post).permit(:title, :content)
     end
 
 end
