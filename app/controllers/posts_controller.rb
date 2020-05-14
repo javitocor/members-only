@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :authenticate_user!, only: %i[new create]
+  before_action :enforce_log_in, only: %i[new create]
   def index
     @posts = Post.all.order(create_at: :asc)
   end
